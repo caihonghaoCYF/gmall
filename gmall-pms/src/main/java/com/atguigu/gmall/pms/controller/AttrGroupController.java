@@ -33,6 +33,15 @@ public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
 
+
+
+    @ApiOperation("根据分类id获取属性组")
+    @GetMapping("{cid}")
+    public Resp<PageVo> queryAttrGroup(QueryCondition condition, @PathVariable("cid") Long cid){
+        return Resp.ok(attrGroupService.getAttrGroupByCid(condition, cid));
+    }
+
+
     /**
      * 列表
      */
