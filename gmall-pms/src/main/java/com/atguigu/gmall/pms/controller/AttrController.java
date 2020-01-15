@@ -7,10 +7,12 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.entity.vo.AttrVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gmall.pms.entity.AttrEntity;
@@ -32,6 +34,25 @@ import com.atguigu.gmall.pms.service.AttrService;
 public class AttrController {
     @Autowired
     private AttrService attrService;
+
+
+
+    @ApiOperation("保存商品属性")
+    @PostMapping("save")
+    public Resp<Object> saveAttr(@RequestBody AttrVo attrVo){
+        Assert.notNull(attrVo.getAttrGroupId(), "属性组ID不能为空");
+        attrService.saveAttrVo(attrVo);
+        return Resp.ok(null);
+    }
+
+
+    @ApiOperation("根据属性类型和分类id获取属性数据")
+    @GetMapping
+    public Resp<PageVo>queryAttrByTypeAndCategory(QueryCondition queryCondition,
+                                                 @RequestParam(value = "type", defaultValue = "0") Integer type,
+                                                 @RequestParam(value = "cid", required = false) Long cid){
+        return Resp.ok(attrService.getByCidAndType(queryCondition, type, cid));
+    }
 
     /**
      * 列表
@@ -58,17 +79,17 @@ public class AttrController {
         return Resp.ok(attr);
     }
 
-    /**
-     * 保存
-     */
-    @ApiOperation("保存")
-    @PostMapping("/save")
-    @PreAuthorize("hasAuthority('pms:attr:save')")
-    public Resp<Object> save(@RequestBody AttrEntity attr){
-		attrService.save(attr);
-
-        return Resp.ok(null);
-    }
+//    /**
+//     * 保存
+//     */
+//    @ApiOperation("保存")
+//    @PostMapping("/save")
+//    @PreAuthorize("hasAuthority('pms:attr:save')")
+//    public Resp<Object> save(@RequestBody AttrEntity attr){
+//		attrService.save(attr);
+//
+//        return Resp.ok(null);
+//    }
 
     /**
      * 修改

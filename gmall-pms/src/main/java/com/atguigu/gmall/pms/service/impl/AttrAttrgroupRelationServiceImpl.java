@@ -1,6 +1,10 @@
 package com.atguigu.gmall.pms.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -21,10 +25,25 @@ public class AttrAttrgroupRelationServiceImpl extends ServiceImpl<AttrAttrgroupR
     public PageVo queryPage(QueryCondition params) {
         IPage<AttrAttrgroupRelationEntity> page = this.page(
                 new Query<AttrAttrgroupRelationEntity>().getPage(params),
-                new QueryWrapper<AttrAttrgroupRelationEntity>()
+                new QueryWrapper<>()
         );
 
         return new PageVo(page);
+    }
+
+    @Override
+    public Object deleteByGroupIdAndAttrId(List<AttrAttrgroupRelationEntity> entities) {
+        entities.forEach(attrAttrgroupRelationEntity -> {
+            Long attrGroupId = attrAttrgroupRelationEntity.getAttrGroupId();
+            boolean attrGroupCondition = attrGroupId != null;
+            Long attrId = attrAttrgroupRelationEntity.getAttrId();
+            boolean attrCondition = attrId != null;
+            Wrapper<AttrAttrgroupRelationEntity> wrapper = new QueryWrapper<AttrAttrgroupRelationEntity>().lambda()
+                    .eq(attrGroupCondition, AttrAttrgroupRelationEntity::getAttrGroupId, attrGroupId)
+                    .eq(attrCondition, AttrAttrgroupRelationEntity::getAttrId, attrId);
+            this.remove(wrapper);
+        });
+        return true;
     }
 
 }

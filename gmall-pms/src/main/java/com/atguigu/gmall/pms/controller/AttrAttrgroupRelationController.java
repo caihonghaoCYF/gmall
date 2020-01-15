@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -32,6 +33,15 @@ import com.atguigu.gmall.pms.service.AttrAttrgroupRelationService;
 public class AttrAttrgroupRelationController {
     @Autowired
     private AttrAttrgroupRelationService attrAttrgroupRelationService;
+
+
+
+    @ApiOperation("根据attrGroupId和attrId删除relation关系")
+    @PostMapping("/delete/attr")
+    public Resp<Object> deleteAttrGroupRelation(@RequestBody List<AttrAttrgroupRelationEntity> entities){
+        return Resp.ok(attrAttrgroupRelationService.deleteByGroupIdAndAttrId(entities));
+    }
+
 
     /**
      * 列表

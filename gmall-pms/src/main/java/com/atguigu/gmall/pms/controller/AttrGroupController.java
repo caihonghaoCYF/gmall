@@ -1,12 +1,14 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.atguigu.gmall.pms.entity.vo.GroupAttrWithRelation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,13 @@ public class AttrGroupController {
 
 
 
+
+    @ApiOperation("查询组及组的规格参数")
+    @GetMapping("/withattr/{gid}")
+    public Resp<GroupAttrWithRelation> queryWithattr(@PathVariable("gid")Long gid){
+        return Resp.ok(attrGroupService.getGroupAttrWithRelationByGid(gid));
+    }
+
     @ApiOperation("根据分类id获取属性组")
     @GetMapping("{cid}")
     public Resp<PageVo> queryAttrGroup(QueryCondition condition, @PathVariable("cid") Long cid){
@@ -50,7 +59,6 @@ public class AttrGroupController {
     @PreAuthorize("hasAuthority('pms:attrgroup:list')")
     public Resp<PageVo> list(QueryCondition queryCondition) {
         PageVo page = attrGroupService.queryPage(queryCondition);
-
         return Resp.ok(page);
     }
 
@@ -63,7 +71,6 @@ public class AttrGroupController {
     @PreAuthorize("hasAuthority('pms:attrgroup:info')")
     public Resp<AttrGroupEntity> info(@PathVariable("attrGroupId") Long attrGroupId){
 		AttrGroupEntity attrGroup = attrGroupService.getById(attrGroupId);
-
         return Resp.ok(attrGroup);
     }
 
