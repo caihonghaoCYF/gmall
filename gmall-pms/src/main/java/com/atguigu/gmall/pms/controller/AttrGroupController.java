@@ -37,6 +37,10 @@ public class AttrGroupController {
 
 
 
+//    public  Resp<>
+
+
+
 
     @ApiOperation("查询组及组的规格参数")
     @GetMapping("/withattr/{gid}")
